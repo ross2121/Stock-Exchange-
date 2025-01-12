@@ -1,12 +1,9 @@
-// @ts-ignore
-import { describe, expect, it, vi } from "vittest";
+import { describe, expect, it, vi } from "vitest";
 import { Engine } from "../trade/Engine";
-import { ReddisManager } from "../redismanager";
+
 import { CREATE_ORDER } from "../types/fromapi";
-
-
 vi.mock("../RedisManager", () => ({
-    ReddisManager: {
+    RedisManager: {
       getInstance: () => ({
         publishMessage: vi.fn(),
         sendToApi: vi.fn(),
@@ -15,12 +12,11 @@ vi.mock("../RedisManager", () => ({
     }
 }));
 
-
 describe("Engine", () => {
-
+    //TODO: How to test the singleton class RedisManager directly?
     it("Publishes Trade updates", () => {
         const engine = new Engine();
-        const publishSpy = vi.spyOn(engine, "publishWsTrades");
+        const publishSpy = vi.spyOn(engine as any, "publishWsTrades");
         engine.process({
             message: {
                 type: CREATE_ORDER,
@@ -34,7 +30,6 @@ describe("Engine", () => {
             },
             clientId: "1"
         });
-
         engine.process({
             message: {
                 type: CREATE_ORDER,

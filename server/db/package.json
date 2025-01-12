@@ -3,14 +3,19 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "run": "node dist/index.js",
+    "dev": "npm run build && node dist/index.js",
+    "seed:db": "npm run build && node dist/seed-db.js",
+    "refresh:views": "npm run build && node dist/cron.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "pg": "^8.13.1"
+    "pg": "^8.13.1",
+    "redis": "^4.7.0"
   },
   "devDependencies": {
     "@types/pg": "^8.11.10"

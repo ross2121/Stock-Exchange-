@@ -47,7 +47,10 @@ export class Orderbook{
     const fills:Fill[]=[];
     let executedQty=0;
     for(let i=0;i<this.asks.length;i++){
-        if(this.asks[i].price<=order.price&&executedQty<order.quantity){
+        if(this.asks[i].userId==order.userId){
+            return {fills:[],executedQty:0}
+        }
+        else if(this.asks[i].price<=order.price&&executedQty<order.quantity){
             const filledqty=Math.min((order.quantity-executedQty),this.asks[i].quantity);
             executedQty+=filledqty;
             this.asks[i].filled+=filledqty;
@@ -73,7 +76,8 @@ export class Orderbook{
    }
    addorder(order:Order):{
     executedQty:number,
-fills:Fill[]}{
+    fills:Fill[]}{
+    
       if(order.side=="buy"){
         const {executedQty,fills}=this.matchbid(order);
          order.filled=executedQty;
@@ -107,8 +111,15 @@ fills:Fill[]}{
    matchask(order:Order):{fills:Fill[],executedQty:number}{
     const fills:Fill[]=[];
     let executedQty=0;
+
     for(let i=0;i<this.bids.length;i++){
-        if(this.bids[i].price>=order.price&&executedQty<order.quantity){
+        if(this.bids[i].userId==order.userId){
+        return {
+            fills:[],
+            executedQty:0
+        }
+        }
+        else if(this.bids[i].price>=order.price&&executedQty<order.quantity){
             const remainingqty=Math.min((order.quantity-executedQty),this.bids[i].quantity);
             executedQty+=remainingqty;
             this.bids[i].filled+=remainingqty;
@@ -191,9 +202,5 @@ fills:Fill[]}{
         bids,
         asks
     }
-
-
-   }
-
-   
+   }  
 }
